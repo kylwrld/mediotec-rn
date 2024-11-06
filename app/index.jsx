@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useAuthContext from "../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Redirect, router } from "expo-router";
+import Spinner from "../components/Spinner";
 
 export default function App() {
     const { postLogin, decodeToken, user } = useAuthContext();
@@ -71,9 +72,7 @@ export default function App() {
                 <View className="bg-blue-600 flex-1">
                     <View className="flex-1 pt-24 items-center bg-white rounded-tl-[120px] px-10 gap-10">
                         {loading ? (
-                            <View className="w-full flex-1 justify-center items-center">
-                                <ActivityIndicator size={70} color="#2563eb" />
-                            </View>
+                            <Spinner />
                         ) : (
                             <>
                                 <Text className="font-inter-semibold text-4xl">Login</Text>
@@ -93,7 +92,7 @@ export default function App() {
                                 />
 
                                 <TouchableOpacity
-                                    className="justify-center items-center w-full bg-blue-600 p-4 rounded-lg"
+                                    className="justify-center items-center w-full bg-orange-600 p-4 rounded-lg"
                                     onPress={onSubmit}>
                                     <Text className="text-lg text-white font-bold">Login</Text>
                                 </TouchableOpacity>

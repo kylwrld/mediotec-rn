@@ -37,7 +37,7 @@ const AnnouncementId = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 p-4 gap-10">
+        <SafeAreaView className="flex-1 bg-white p-4 gap-10">
             <ScrollView>
                 <View className="gap-4">
                     <Text className="font-inter-regular text-2xl">{announcement.title}</Text>

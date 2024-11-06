@@ -1,9 +1,10 @@
-import { View, Text, FlatList, ActivityIndicator, RefreshControl, TextInput, Pressable, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, FlatList, ActivityIndicator, RefreshControl, TextInput, Pressable, TouchableOpacity, StyleSheet, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import useAuthContext from "../../context/AuthContext";
 import { Pin, SendHorizontal } from "lucide-react-native";
+import Spinner from "../../components/Spinner";
 
 const AnnouncementCard = ({ item }) => {
     const { postRequest } = useAuthContext();
@@ -51,7 +52,7 @@ const AnnouncementCard = ({ item }) => {
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const { id } = useLocalSearchParams();
     const { getRequest } = useAuthContext();
@@ -60,20 +61,20 @@ const Announcements = () => {
         const response = await getRequest("announcement/");
         const data = await response.json();
         setAnnouncements(data.announcements);
+        setLoading(false);
+        setRefreshing(false);
     };
     useEffect(() => {
-        setLoading(true);
         fetchAnnouncements();
-        setLoading(false);
     }, []);
 
     function onRefresh() {
         setRefreshing(true);
         fetchAnnouncements();
-        setRefreshing(false);
     }
 
-    if (loading) return <ActivityIndicator />;
+    // if (refreshing) return <Spinner />
+    if (loading || refreshing) return <Spinner />
 
     return (
         <SafeAreaView className="flex-1 p-4 bg-white">
@@ -91,6 +92,7 @@ const Announcements = () => {
                     </View>
                 )}
             />
+            {/* <View className="w-full h-12 bg-red-600" style={{boxShadow: "5 5 5 0 rgba(255, 255, 0, 1)"}}></View> */}
         </SafeAreaView>
     );
 };

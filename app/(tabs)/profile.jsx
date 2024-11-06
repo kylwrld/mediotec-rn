@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAuthContext from "../../context/AuthContext";
 import { LogOut } from "lucide-react-native";
+import Spinner from "../../components/Spinner";
 
 const SettingsItem = ({ children, onPress }) => {
     return (
@@ -38,11 +39,7 @@ const Profile = () => {
         fetchGrades()
     }, [])
 
-    console.log(loading)
-    if (loading) return <ActivityIndicator />
-    console.log(userData)
-
-
+    if (loading) return <Spinner />
 
     return (
         <SafeAreaView className="flex-1 bg-white">

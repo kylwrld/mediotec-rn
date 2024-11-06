@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Bell, UserRound, UsersRound } from "lucide-react-native";
+import { Bell, NotepadText, UserRound, UsersRound } from "lucide-react-native";
 import React from "react";
 
 const TabsLayout = () => {
@@ -25,6 +25,14 @@ const TabsLayout = () => {
                         headerShown: false,
                     }}
                     />
+                <Tabs.Screen
+                    name="grades"
+                    options={{
+                        title: "Conceitos",
+                        tabBarIcon: ({ color, focused }) => <NotepadText color={color} />,
+                        headerShown: false,
+                    }}
+                />
                 <Tabs.Screen
                     name="profile"
                     options={{
