@@ -8,7 +8,7 @@
         "userInterfaceStyle": "light",
         "scheme": "mediotec-rn",
         "splash": {
-            "image": "./assets/splash.png",
+            "image": "./assets/splash_mediotec.png",
             "resizeMode": "contain",
             "backgroundColor": "#ffffff"
         },

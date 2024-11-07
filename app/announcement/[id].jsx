@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAuthContext from "../../context/AuthContext";
 import { Dot, SendHorizontal, Users, UsersRound } from "lucide-react-native";
+import Spinner from "../../components/Spinner";
 
 const AnnouncementId = () => {
     const { id } = useLocalSearchParams();
@@ -24,9 +25,7 @@ const AnnouncementId = () => {
         fetchAnnouncement();
     }, [announcement]);
 
-    if (loading) {
-        return <ActivityIndicator />;
-    }
+    if (loading) return <Spinner />
 
     async function sendComment() {
         if (comment.trim() == "") return;
@@ -39,8 +38,8 @@ const AnnouncementId = () => {
     return (
         <SafeAreaView className="flex-1 bg-white p-4 gap-10">
             <ScrollView>
-                <View className="gap-4">
-                    <Text className="font-inter-regular text-2xl">{announcement.title}</Text>
+                <View className="gap-2">
+                    <Text className="font-inter-bold text-2xl my-6">{announcement.title}</Text>
                     {/* <Text className="font-inter-regular text-xl">ASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASD ASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASD</Text> */}
                     <View className="flex-row items-center">
                         <Text className="font-inter-regular text-lg text-gray-500">{announcement.user.name}</Text>
@@ -49,14 +48,14 @@ const AnnouncementId = () => {
                             {new Date(announcement.created_at).toLocaleString("pt-BR")}
                         </Text>
                     </View>
-                    <View className="border-t-[1px] border-gray-300 my-2"></View>
+                    <View className="border-t-[1px] border-slate-300 my-2"></View>
                 </View>
                 <View className="py-4">
                     <Text className="font-inter-regular text-xl">{announcement.body}</Text>
                     {/* <Text className="font-inter-regular text-xl">ASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASD ASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASDASDPJASDIASD DASIASDJASDIOJASD ASDIASDJIOASD DIJASD</Text> */}
                 </View>
                 <View className="h-full gap-4">
-                    <View className="border-t-[1px] border-gray-300 my-2"></View>
+                    <View className="border-t-[1px] border-slate-300 my-2"></View>
                     <View className="w-full gap-4">
                         <View className="flex-row gap-2">
                             <Users color="black" />
@@ -93,7 +92,7 @@ const AnnouncementId = () => {
             <View className="flex-row items-center gap-2">
                 <TextInput
                     placeholder="Adicionar comentário para a turma..."
-                    className="flex-1 border-[1px] border-gray-300 rounded-lg px-4 py-2"
+                    className="flex-1 border-[1px] border-slate-300 rounded-lg px-4 py-2 focus:border-slate-500"
                     value={comment}
                     onChangeText={setComment}
                 />

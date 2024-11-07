@@ -9,7 +9,7 @@ const FormTextInputField = ({ label, value, placeholder, onChangeText, error }) 
             <Text className="font-inter-regular">{label}</Text>
             {/* <View className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:border-secondary flex flex-row items-center"> */}
             <TextInput
-                className="font-inter-regular w-full px-4 py-2 rounded-lg border border-slate-300"
+                className="font-inter-regular w-full px-4 py-2 rounded-lg border border-slate-300 focus:border-slate-500"
                 placeholder={placeholder}
                 placeholderTextColor="#94a3b8"
                 onChangeText={onChangeText}

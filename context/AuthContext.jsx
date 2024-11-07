@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
 
@@ -7,15 +7,40 @@ export const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 export default useAuthContext
 
+const API_URL = "http://192.168.1.9:8000/"
+
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
-    const [tokens, setTokens] = useState(
-        AsyncStorage.getItem("tokens") ? AsyncStorage.getItem("tokens") : null
-    );
-    const [user, setUser] = useState({});
+    const [tokens, setTokens] = useState();
+    const [user, setUser] = useState();
+
+    useEffect(() => {
+        const getTokens = async () => {
+            const _tokens = await AsyncStorage.getItem("tokens")
+            const parsedTokens = JSON.parse(_tokens)
+            if (parsedTokens) {
+                const user = jwtDecode(JSON.stringify(_tokens))
+                setTokens(parsedTokens)
+                setUser(user)
+                router.replace("/announcements")
+            } else {
+                router.replace("/login")
+            }
+        }
+        getTokens()
+    }, [])
+
+    async function getNewAccessToken() {
+        const response = await fetch(API_URL + "api/token/refresh/", {body: JSON.stringify({refresh: tokens.refresh})})
+        const data = response.json()
+        const _tokens = {...tokens, access: data.access}
+        const _user = jwtDecode(JSON.stringify(_tokens))
+        setTokens(_tokens)
+        setUser(_user)
+    }
 
     async function postRequest(url, obj) {
-        const res = await fetch(`http://192.168.1.9:8000/${url}`, {
+        const res = await fetch(`${API_URL}${url}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,14 +50,15 @@ export function AuthProvider({ children }) {
         });
 
         if (res.status === 401) {
-            logout();
+            getNewAccessToken()
+            // logout();
         }
 
         return res;
     }
 
     async function getRequest(url) {
-        const res = await fetch(`http://192.168.1.9:8000/${url}`, {
+        const res = await fetch(`${API_URL}${url}`, {
             method: "GET",
             headers: { Authorization: "Bearer " + tokens.access },
         });
@@ -75,7 +101,7 @@ export function AuthProvider({ children }) {
     }
 
     async function postLogin(userObject) {
-        const res = await fetch("http://192.168.1.9:8000/login/", {
+        const res = await fetch(API_URL + "login/", {
         // const res = await fetch("https://mediotec-be.onrender.com/login/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -99,7 +125,7 @@ export function AuthProvider({ children }) {
         setTokens(null);
         setIsLogged(false);
         setUser({})
-        router.replace("/")
+        router.replace("/login")
     }
 
     async function decodeToken() {

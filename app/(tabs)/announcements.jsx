@@ -5,6 +5,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import useAuthContext from "../../context/AuthContext";
 import { Pin, SendHorizontal } from "lucide-react-native";
 import Spinner from "../../components/Spinner";
+import { dateDiff } from "../../lib/utils";
 
 const AnnouncementCard = ({ item }) => {
     const { postRequest } = useAuthContext();
@@ -21,11 +22,12 @@ const AnnouncementCard = ({ item }) => {
             style={styles.shadowProp}
             className="w-full"
             onPress={() => router.push({ pathname: `/announcement/[id]`, params: { id: item.id } })}>
-            <View className="border border-gray-400 rounded-t-lg p-4 gap-5">
+            <View className="border border-slate-400 rounded-t-lg p-4 gap-5">
                 <View className="justify-between flex-row">
                     <View>
                         <Text className="text-xl font-bold">{item.user.name}</Text>
-                        <Text className="text-[#64748b]">{new Date(item.created_at).toLocaleString("pt-BR")}</Text>
+                        {/* <Text className="text-[#64748b]">{new Date(item.created_at).toLocaleString("pt-BR")}</Text> */}
+                        <Text className="text-[#64748b]">{dateDiff(new Date(), new Date(item.created_at))}</Text>
                     </View>
 
                     {item.fixed && <Pin color="black" />}
@@ -35,15 +37,16 @@ const AnnouncementCard = ({ item }) => {
                     <Text className="text-lg">{item.body}</Text>
                 </View>
             </View>
-            <View className="flex-row border-b border-x border-gray-400 rounded-b-lg p-2">
+            <View className="flex-row border-b border-x border-slate-400 rounded-b-lg p-2">
                 <TextInput
                     className="flex-1"
                     placeholder="Escreva um comentário..."
+                    placeholderTextColor="#64748b"
                     value={comment}
                     onChangeText={setComment}
                 />
                 <TouchableOpacity className="p-2" onPress={sendComment}>
-                    <SendHorizontal color="#9ca3af" />
+                    <SendHorizontal color="#64748b" />
                 </TouchableOpacity>
             </View>
         </Pressable>

@@ -42,10 +42,10 @@ const RootLayout = () => {
         <AuthProvider>
             <StatusBar backgroundColor="#2563eb" style="light" />
             <Stack>
-                {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="announcement/[id]" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "ios" }}  />
+                <Stack.Screen name="index" options={{ headerShown: false, animation: "ios" }} />
+                <Stack.Screen name="login" options={{ headerShown: false, animation: "ios" }} />
+                <Stack.Screen name="announcement/[id]" options={{ headerShown: false, animation: "ios" }} />
             </Stack>
         </AuthProvider>
     );
