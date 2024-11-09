@@ -1,10 +1,6 @@
-import { Redirect } from "expo-router";
-import useAuthContext from "../context/AuthContext";
-import { useEffect, useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
 import Spinner from "../components/Spinner";
-import Login from "./login";
-import { StatusBar } from "expo-status-bar";
 
 export default function App() {
     // const { user } = useAuthContext();

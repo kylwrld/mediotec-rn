@@ -1,13 +1,13 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from "expo-router";
 
 export const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
-export default useAuthContext
+export default useAuthContext;
 
-const API_URL = "http://192.168.1.9:8000/"
+const API_URL = "http://192.168.1.9:8000/";
 
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
@@ -16,27 +16,34 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const getTokens = async () => {
-            const _tokens = await AsyncStorage.getItem("tokens")
-            const parsedTokens = JSON.parse(_tokens)
+            const _tokens = await AsyncStorage.getItem("tokens");
+            const parsedTokens = JSON.parse(_tokens);
             if (parsedTokens) {
-                const user = jwtDecode(JSON.stringify(_tokens))
-                setTokens(parsedTokens)
-                setUser(user)
-                router.replace("/announcements")
+                const user = jwtDecode(JSON.stringify(_tokens));
+                setTokens(parsedTokens);
+                setUser(user);
+                router.replace("/announcements");
             } else {
-                router.replace("/login")
+                router.replace("/login");
             }
-        }
-        getTokens()
-    }, [])
+        };
+        getTokens();
+    }, []);
 
     async function getNewAccessToken() {
-        const response = await fetch(API_URL + "api/token/refresh/", {body: JSON.stringify({refresh: tokens.refresh})})
-        const data = response.json()
-        const _tokens = {...tokens, access: data.access}
-        const _user = jwtDecode(JSON.stringify(_tokens))
-        setTokens(_tokens)
-        setUser(_user)
+        console.log("attempt to reconnect");
+        console.log({ refresh: tokens.refresh });
+        console.log(JSON.stringify({ refresh: tokens.refresh }));
+
+        const response = await fetch(API_URL + "api/token/refresh/", {
+            method: "POST",
+            body: JSON.stringify({ refresh: tokens.refresh }),
+        });
+        const data = response.json();
+        const _tokens = { ...tokens, access: data.access };
+        const _user = jwtDecode(JSON.stringify(_tokens));
+        setTokens(_tokens);
+        setUser(_user);
     }
 
     async function postRequest(url, obj) {
@@ -50,7 +57,7 @@ export function AuthProvider({ children }) {
         });
 
         if (res.status === 401) {
-            getNewAccessToken()
+            getNewAccessToken();
             // logout();
         }
 
@@ -64,6 +71,7 @@ export function AuthProvider({ children }) {
         });
 
         if (res.status === 401) {
+            getNewAccessToken();
             logout();
         }
 
@@ -102,7 +110,7 @@ export function AuthProvider({ children }) {
 
     async function postLogin(userObject) {
         const res = await fetch(API_URL + "login/", {
-        // const res = await fetch("https://mediotec-be.onrender.com/login/", {
+            // const res = await fetch("https://mediotec-be.onrender.com/login/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userObject),
@@ -113,7 +121,7 @@ export function AuthProvider({ children }) {
         if (res.ok) {
             setTokens(data);
             setIsLogged(true);
-            setUser(jwtDecode(JSON.stringify(data)))
+            setUser(jwtDecode(JSON.stringify(data)));
             AsyncStorage.setItem("tokens", JSON.stringify(data));
         }
 
@@ -124,8 +132,8 @@ export function AuthProvider({ children }) {
         AsyncStorage.removeItem("tokens");
         setTokens(null);
         setIsLogged(false);
-        setUser({})
-        router.replace("/login")
+        setUser({});
+        router.replace("/login");
     }
 
     async function decodeToken() {

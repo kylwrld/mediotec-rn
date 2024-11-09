@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DataTable from "../../components/DataTable";
+import Spinner from "../../components/Spinner";
 import useAuthContext from "../../context/AuthContext";
 import { mergeLists } from "../../lib/utils";
-import Spinner from "../../components/Spinner";
-import DataTable from "../../components/DataTable";
 
 const Grades = () => {
     const { user, getRequest } = useAuthContext();
@@ -40,14 +40,21 @@ const Grades = () => {
 
             const gradesResponse = await getRequest(`grade/${user.id}/2024/`);
             const gradesData = await gradesResponse.json();
-            setGrades(mergeLists(gradesList, gradesData.grades, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
+            setGrades(
+                mergeLists(
+                    gradesList,
+                    gradesData.grades,
+                    (item, first_list_item) =>
+                        item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name
+                )
+            );
             setLoading(false);
         };
 
-        fetchSubjects()
+        fetchSubjects();
     }, []);
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     return (
         <SafeAreaView className="p-4 flex-1 bg-white">
@@ -63,84 +70,148 @@ const columns = [
     {
         accessorKey: "teacher_subject",
         header: "Disciplina",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.teacher_subject.subject.name}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.teacher_subject.subject.name}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "av1_1",
         header: "AV1",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_1 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_1 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "av2_1",
         header: "AV2",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_1 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_1 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "mu_1",
         header: "Menção da Unidade",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_1 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_1 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "noa_1",
         header: "NOA",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_1 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_1 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "cf_1",
         header: "Conceito Final",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_1 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_1 || "-"}</Text>
+            </View>
+        ),
     },
 
     {
         accessorKey: "av1_2",
         header: "AV1",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_2 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_2 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "av2_2",
         header: "AV2",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_2 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_2 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "mu_2",
         header: "Menção da Unidade",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_2 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_2 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "noa_2",
         header: "NOA",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_2 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_2 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "cf_2",
         header: "Conceito Final",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_2 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_2 || "-"}</Text>
+            </View>
+        ),
     },
 
     {
         accessorKey: "av1_3",
         header: "AV1",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_3 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av1_3 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "av2_3",
         header: "AV2",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_3 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.av2_3 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "mu_3",
         header: "Menção da Unidade",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_3 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.mu_3 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "noa_3",
         header: "NOA",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_3 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.noa_3 || "-"}</Text>
+            </View>
+        ),
     },
     {
         accessorKey: "cf_3",
         header: "Conceito Final",
-        cell: ({ row }) => <View className="justify-center"><Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_3 || "-"}</Text></View>,
+        cell: ({ row }) => (
+            <View className="justify-center">
+                <Text className="font-inter-regular max-w-32 text-center w-32">{row.cf_3 || "-"}</Text>
+            </View>
+        ),
     },
 ];
 

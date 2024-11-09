@@ -1,12 +1,12 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 
+import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../context/AuthContext";
 import "../global.css";
-import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,7 +42,7 @@ const RootLayout = () => {
         <AuthProvider>
             <StatusBar backgroundColor="#2563eb" style="light" />
             <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "ios" }}  />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "ios" }} />
                 <Stack.Screen name="index" options={{ headerShown: false, animation: "ios" }} />
                 <Stack.Screen name="login" options={{ headerShown: false, animation: "ios" }} />
                 <Stack.Screen name="announcement/[id]" options={{ headerShown: false, animation: "ios" }} />

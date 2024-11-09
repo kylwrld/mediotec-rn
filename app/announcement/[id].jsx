@@ -1,10 +1,10 @@
-import { View, Text, ActivityIndicator, TextInput, ScrollView, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
+import { Dot, SendHorizontal, Users } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useAuthContext from "../../context/AuthContext";
-import { Dot, SendHorizontal, Users, UsersRound } from "lucide-react-native";
 import Spinner from "../../components/Spinner";
+import useAuthContext from "../../context/AuthContext";
 
 const AnnouncementId = () => {
     const { id } = useLocalSearchParams();
@@ -25,7 +25,7 @@ const AnnouncementId = () => {
         fetchAnnouncement();
     }, [announcement]);
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     async function sendComment() {
         if (comment.trim() == "") return;
@@ -92,7 +92,7 @@ const AnnouncementId = () => {
             <View className="flex-row items-center gap-2">
                 <TextInput
                     placeholder="Adicionar comentário para a turma..."
-                    className="flex-1 border-[1px] border-slate-300 rounded-lg px-4 py-2 focus:border-slate-500"
+                    className="font-inter-regular flex-1 border-[1px] border-slate-300 rounded-lg px-4 py-2 focus:border-slate-500"
                     value={comment}
                     onChangeText={setComment}
                 />

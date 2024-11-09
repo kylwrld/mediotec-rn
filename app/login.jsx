@@ -1,10 +1,13 @@
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import FormTextInputField from "../components/FormTextInputField";
 import Spinner from "../components/Spinner";
 import useAuthContext from "../context/AuthContext";
-import { StatusBar } from "expo-status-bar";
+
+const BG_ONE = "bg-white";
+const BG_TWO = "bg-blue-600";
 
 export default function Login() {
     const { postLogin, decodeToken, user } = useAuthContext();
@@ -44,9 +47,9 @@ export default function Login() {
     }
 
     return (
-        <View className="flex-1 bg-white">
+        <View className={`flex-1 ${BG_ONE}`}>
             <ScrollView>
-                <View className="jutify-center items-center bg-blue-600 w-full h-60 rounded-br-[120px]">
+                <View className={`jutify-center items-center w-full h-60 rounded-br-[120px] ${BG_TWO}`}>
                     <Image
                         className="max-w-[260px] h-full"
                         source={require("../assets/images/mediotec-mobile.webp")}
@@ -56,8 +59,8 @@ export default function Login() {
                         <Text className="font-inter-semibold text-4xl text-white">Login</Text>
                     </View> */}
                 </View>
-                <View className="bg-blue-600 flex-1">
-                    <View className="flex-1 pt-24 items-center bg-white rounded-tl-[120px] px-10 gap-10">
+                <View className={`flex-1 ${BG_TWO}`}>
+                    <View className={`flex-1 pt-24 items-center rounded-tl-[120px] px-10 gap-10 ${BG_ONE}`}>
                         {loading ? (
                             <Spinner />
                         ) : (

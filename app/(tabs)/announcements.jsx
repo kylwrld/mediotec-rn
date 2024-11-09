@@ -1,10 +1,11 @@
-import { View, Text, FlatList, ActivityIndicator, RefreshControl, TextInput, Pressable, TouchableOpacity, StyleSheet, Button } from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { router, useLocalSearchParams } from "expo-router";
-import useAuthContext from "../../context/AuthContext";
+import { router } from "expo-router";
 import { Pin, SendHorizontal } from "lucide-react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Option from "../../components/Option";
 import Spinner from "../../components/Spinner";
+import useAuthContext from "../../context/AuthContext";
 import { dateDiff } from "../../lib/utils";
 
 const AnnouncementCard = ({ item }) => {
@@ -20,14 +21,16 @@ const AnnouncementCard = ({ item }) => {
     return (
         <Pressable
             style={styles.shadowProp}
-            className="w-full"
+            className="w-full bg-white rounded-lg"
             onPress={() => router.push({ pathname: `/announcement/[id]`, params: { id: item.id } })}>
             <View className="border border-slate-400 rounded-t-lg p-4 gap-5">
                 <View className="justify-between flex-row">
-                    <View>
+                    <View className="flex-row justify-center items-center gap-2">
                         <Text className="text-xl font-bold">{item.user.name}</Text>
                         {/* <Text className="text-[#64748b]">{new Date(item.created_at).toLocaleString("pt-BR")}</Text> */}
+                        <View className="h-[5px] w-[5px] bg-slate-400 rounded-full"></View>
                         <Text className="text-[#64748b]">{dateDiff(new Date(), new Date(item.created_at))}</Text>
+                        {/* <Text className="text-slate-400">{dateDiff(new Date(), new Date(item.created_at))}</Text> */}
                     </View>
 
                     {item.fixed && <Pin color="black" />}
@@ -53,12 +56,15 @@ const AnnouncementCard = ({ item }) => {
     );
 };
 
+const selectOptions = ["Todos", "Turma", "Fixados"];
+
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
+    const [filter, setFilter] = useState(() => (announcement) => announcement);
     const [loading, setLoading] = useState(true);
+    const [selectedOption, setSelectedOption] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
-    const { id } = useLocalSearchParams();
-    const { getRequest } = useAuthContext();
+    const { getRequest, user } = useAuthContext();
 
     const fetchAnnouncements = async () => {
         const response = await getRequest("announcement/");
@@ -76,26 +82,36 @@ const Announcements = () => {
         fetchAnnouncements();
     }
 
-    // if (refreshing) return <Spinner />
-    if (loading || refreshing) return <Spinner />
+    const renderItem = useCallback(({ item }) => {
+        return <AnnouncementCard item={item} />;
+    }, []);
+
+    if (loading || refreshing) return <Spinner />;
 
     return (
         <SafeAreaView className="flex-1 p-4 bg-white">
             <FlatList
-                data={announcements}
+                data={announcements.filter(filter)}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => {
-                    return <AnnouncementCard item={item} />;
-                }}
+                renderItem={renderItem}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
                 ListHeaderComponent={() => (
                     <View className="my-6">
                         <Text className="font-inter-bold text-blue-600 text-4xl">Avisos</Text>
+                        <Option
+                            options={selectOptions}
+                            state={selectedOption}
+                            setState={setSelectedOption}
+                            onChange={({ selectedOption }) => {
+                                if (selectedOption == 0) {setFilter(() => (announcement) => announcement);}
+                                if (selectedOption == 1) {setFilter(() => (announcement) => announcement.class_year?._class.id == user.class_id);}
+                                if (selectedOption == 2) {setFilter(() => (announcement) => announcement.fixed);}
+                            }}
+                        />
                     </View>
                 )}
             />
-            {/* <View className="w-full h-12 bg-red-600" style={{boxShadow: "5 5 5 0 rgba(255, 255, 0, 1)"}}></View> */}
         </SafeAreaView>
     );
 };
@@ -104,9 +120,9 @@ export default Announcements;
 
 const styles = StyleSheet.create({
     shadowProp: {
-      shadowColor: '#171717',
-      shadowOffset: {width: -2, height: 4},
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
+        shadowColor: "#171717",
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
-  });
+});

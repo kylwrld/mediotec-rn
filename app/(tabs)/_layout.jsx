@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Bell, NotepadText, UserRound, UsersRound } from "lucide-react-native";
+import { Bell, NotepadText, UserRound } from "lucide-react-native";
 import React from "react";
 
 const TabsLayout = () => {
