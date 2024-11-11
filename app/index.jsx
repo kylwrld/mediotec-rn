@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native";
+import { Image, SafeAreaView, View } from "react-native";
 import Spinner from "../components/Spinner";
 
 export default function App() {
@@ -8,6 +8,9 @@ export default function App() {
     // return user?.type == "STUDENT" ? <Redirect href="/announcements" /> : <Login />;
     return (
         <SafeAreaView className="flex-1 bg-white">
+            {/* <Image
+                source={require("../assets/splash.png")}
+            /> */}
             <Spinner />
             <StatusBar style="auto" />
         </SafeAreaView>

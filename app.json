@@ -8,9 +8,9 @@
         "userInterfaceStyle": "light",
         "scheme": "mediotec-rn",
         "splash": {
-            "image": "./assets/splash_mediotec.png",
+            "image": "./assets/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#2563eb"
         },
         "ios": {
             "supportsTablet": true
@@ -42,10 +42,9 @@
             ]
         ],
         "androidStatusBar": {
-            "backgroundColor": "#ffffff",
-            "barStyle": "dark-content",
-            "translucent": true,
-            "hidden": false
+            "barStyle": "light-content",
+            "backgroundColor":"#00000000",
+            "translucent": true
         }
     }
 }

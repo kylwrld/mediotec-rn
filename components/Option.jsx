@@ -27,9 +27,9 @@ const Option = ({ options = [], onChange = () => {}, state, setState = () => {} 
                     return (
                         <TouchableOpacity
                             key={index}
-                            className="bg-orange-600/70 w-32 h-12 rounded-full justify-center items-center"
+                            className="border border-slate-400 w-32 h-12 rounded-full justify-center items-center"
                             onPress={() => _onChange(index)}>
-                            <Text className="font-inter-semibold text-white">{option}</Text>
+                            <Text className="font-inter-semibold">{option}</Text>
                         </TouchableOpacity>
                     );
                 }

@@ -1,12 +1,13 @@
 import { router } from "expo-router";
 import { Pin, SendHorizontal } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Keyboard, Pressable, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Option from "../../components/Option";
 import Spinner from "../../components/Spinner";
 import useAuthContext from "../../context/AuthContext";
 import { dateDiff } from "../../lib/utils";
+import { StatusBar } from "expo-status-bar";
 
 const AnnouncementCard = ({ item }) => {
     const { postRequest } = useAuthContext();
@@ -16,6 +17,8 @@ const AnnouncementCard = ({ item }) => {
     async function sendComment() {
         const data = { body: comment, announcement: id };
         await postRequest("/comment/", data);
+        setComment("")
+        Keyboard.dismiss()
     }
 
     return (
@@ -63,7 +66,6 @@ const Announcements = () => {
     const [filter, setFilter] = useState(() => (announcement) => announcement);
     const [loading, setLoading] = useState(true);
     const [selectedOption, setSelectedOption] = useState(0);
-    const [refreshing, setRefreshing] = useState(false);
     const { getRequest, user } = useAuthContext();
 
     const fetchAnnouncements = async () => {
@@ -71,14 +73,13 @@ const Announcements = () => {
         const data = await response.json();
         setAnnouncements(data.announcements);
         setLoading(false);
-        setRefreshing(false);
     };
     useEffect(() => {
         fetchAnnouncements();
     }, []);
 
     function onRefresh() {
-        setRefreshing(true);
+        setLoading(true);
         fetchAnnouncements();
     }
 
@@ -86,7 +87,7 @@ const Announcements = () => {
         return <AnnouncementCard item={item} />;
     }, []);
 
-    if (loading || refreshing) return <Spinner />;
+    if (loading || loading) return <Spinner />;
 
     return (
         <SafeAreaView className="flex-1 p-4 bg-white">
@@ -94,7 +95,8 @@ const Announcements = () => {
                 data={announcements.filter(filter)}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}
+                keyboardShouldPersistTaps="always"
                 ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
                 ListHeaderComponent={() => (
                     <View className="my-6">
@@ -112,6 +114,7 @@ const Announcements = () => {
                     </View>
                 )}
             />
+            <StatusBar backgroundColor="#fff" />
         </SafeAreaView>
     );
 };

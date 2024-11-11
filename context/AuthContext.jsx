@@ -37,13 +37,24 @@ export function AuthProvider({ children }) {
 
         const response = await fetch(API_URL + "api/token/refresh/", {
             method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+            },
             body: JSON.stringify({ refresh: tokens.refresh }),
         });
-        const data = response.json();
-        const _tokens = { ...tokens, access: data.access };
-        const _user = jwtDecode(JSON.stringify(_tokens));
-        setTokens(_tokens);
-        setUser(_user);
+        if (response.ok) {
+            console.log("response", response)
+            const data = await response.json();
+            console.log("data", data)
+            const _tokens = { ...tokens, access: data.access };
+            console.log("_tokens", _tokens)
+            const _user = jwtDecode(JSON.stringify(_tokens));
+            console.log("_user", _user)
+            setTokens(_tokens);
+            setUser(_user);
+            return router.replace("/announcements")
+        }
+        return
     }
 
     async function postRequest(url, obj) {
@@ -65,10 +76,15 @@ export function AuthProvider({ children }) {
     }
 
     async function getRequest(url) {
-        const res = await fetch(`${API_URL}${url}`, {
-            method: "GET",
-            headers: { Authorization: "Bearer " + tokens.access },
-        });
+        let res;
+        try {
+            res = await fetch(`${API_URL}${url}`, {
+                method: "GET",
+                headers: { Authorization: "Bearer " + tokens.access },
+            });
+        } catch {
+            throw Error
+        }
 
         if (res.status === 401) {
             getNewAccessToken();

@@ -48,7 +48,7 @@ export default function Login() {
 
     return (
         <View className={`flex-1 ${BG_ONE}`}>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps="always">
                 <View className={`jutify-center items-center w-full h-60 rounded-br-[120px] ${BG_TWO}`}>
                     <Image
                         className="max-w-[260px] h-full"
