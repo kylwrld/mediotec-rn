@@ -65,7 +65,6 @@ const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [filter, setFilter] = useState(() => (announcement) => announcement);
     const [loading, setLoading] = useState(true);
-    const [selectedOption, setSelectedOption] = useState(0);
     const { getRequest, user } = useAuthContext();
 
     const fetchAnnouncements = async () => {
@@ -95,24 +94,15 @@ const Announcements = () => {
                 data={announcements.filter(filter)}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
+                initialNumToRender={3}
+                maxToRenderPerBatch={3}
+                // updateCellsBatchingPeriod={500}
+                // removeClippedSubviews={true}
+                // windowSize={10}
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}
                 keyboardShouldPersistTaps="always"
                 ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-                ListHeaderComponent={() => (
-                    <View className="my-6">
-                        <Text className="font-inter-bold text-blue-600 text-4xl">Avisos</Text>
-                        <Option
-                            options={selectOptions}
-                            state={selectedOption}
-                            setState={setSelectedOption}
-                            onChange={({ selectedOption }) => {
-                                if (selectedOption == 0) {setFilter(() => (announcement) => announcement);}
-                                if (selectedOption == 1) {setFilter(() => (announcement) => announcement.class_year?._class.id == user.class_id);}
-                                if (selectedOption == 2) {setFilter(() => (announcement) => announcement.fixed);}
-                            }}
-                        />
-                    </View>
-                )}
+                ListHeaderComponent={<ListHeaderComponent setFilter={setFilter} user={user}/>}
             />
             <StatusBar backgroundColor="#fff" />
         </SafeAreaView>
@@ -120,6 +110,24 @@ const Announcements = () => {
 };
 
 export default Announcements;
+
+const ListHeaderComponent = ({ setFilter, user }) => {
+    const onOptionChange = ({ selected }) => {
+        if (selected == 0) {setFilter(() => (announcement) => announcement);}
+        if (selected == 1) {setFilter(() => (announcement) => announcement.class_year?._class.id == user.class_id);}
+        if (selected == 2) {setFilter(() => (announcement) => announcement.fixed);}
+    }
+
+    return (
+        <View className="my-6">
+            <Text className="font-inter-bold text-blue-600 text-4xl">Avisos</Text>
+            <Option
+                options={selectOptions}
+                onChange={onOptionChange}
+            />
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     shadowProp: {

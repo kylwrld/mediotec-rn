@@ -1,20 +1,21 @@
-import React from "react";
+import React, { memo, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const Option = ({ options = [], onChange = () => {}, state, setState = () => {} }) => {
+const Option = ({ options = [], onChange = () => {} }) => {
+    const [selectedOption, setSelectedOption] = useState(0);
     // useEffect(() => {
     //     onChange({ selectedOption })
     // }, [selectedOption])
 
-    function _onChange(selectedOption) {
-        setState(selectedOption);
-        onChange({ selectedOption });
+    function _onChange(selected) {
+        setSelectedOption(selected)
+        onChange({ selected });
     }
 
     return (
         <View className="pt-4 flex-row w-full gap-4 justify-between">
             {options.map((option, index) => {
-                if (state == index) {
+                if (selectedOption == index) {
                     return (
                         <TouchableOpacity
                             key={index}

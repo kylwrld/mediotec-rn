@@ -2,6 +2,15 @@ import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Bell, Calendar, FileText, UserRound } from "lucide-react-native";
 import React from "react";
+import { View } from "react-native";
+
+const Icon = ({ children }) => {
+    return (
+        <View className="justify-center items-center flex-1 w-full">
+            {children}
+        </View>
+    )
+}
 
 const TabsLayout = () => {
     return (
@@ -23,7 +32,7 @@ const TabsLayout = () => {
                     name="announcements"
                     options={{
                         title: "Comunicados",
-                        tabBarIcon: ({ color, focused }) => <Bell color={color} />,
+                        tabBarIcon: ({ color, focused }) => <Icon><Bell color={color} /></Icon>,
                         headerShown: false,
                     }}
                 />
@@ -31,7 +40,7 @@ const TabsLayout = () => {
                     name="grades"
                     options={{
                         title: "Conceitos",
-                        tabBarIcon: ({ color, focused }) => <FileText color={color} />,
+                        tabBarIcon: ({ color, focused }) => <Icon><FileText color={color} /></Icon>,
                         headerShown: false,
                     }}
                 />
@@ -39,7 +48,7 @@ const TabsLayout = () => {
                     name="time-schedule"
                     options={{
                         title: "Conceitos",
-                        tabBarIcon: ({ color, focused }) => <Calendar color={color} />,
+                        tabBarIcon: ({ color, focused }) => <Icon><Calendar color={color} /></Icon>,
                         headerShown: false,
                     }}
                 />
@@ -47,7 +56,7 @@ const TabsLayout = () => {
                     name="profile"
                     options={{
                         title: "Perfil",
-                        tabBarIcon: ({ color, focused }) => <UserRound color={color} />,
+                        tabBarIcon: ({ color, focused }) => <Icon><UserRound color={color} /></Icon>,
                         headerShown: false,
                     }}
                 />

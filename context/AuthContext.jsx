@@ -7,7 +7,7 @@ export const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 export default useAuthContext;
 
-const API_URL = "http://192.168.1.9:8000/";
+const API_URL = "https://mediotec-be.onrender.com/";
 
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
@@ -88,7 +88,7 @@ export function AuthProvider({ children }) {
 
         if (res.status === 401) {
             getNewAccessToken();
-            logout();
+            //logout();
         }
 
         return res;
