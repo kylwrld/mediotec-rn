@@ -31,7 +31,7 @@ const AnnouncementId = () => {
     async function sendComment() {
         if (comment.trim() == "") return;
         const data = { body: comment, announcement: id };
-        const response = await postRequest("/comment/", data);
+        const response = await postRequest("comment/", data);
         const commentData = (await response.json()).comment;
         setAnnouncement({ ...announcement, comments: [...announcement.comments, commentData] });
         setComment("")
