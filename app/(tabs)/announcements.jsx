@@ -16,7 +16,7 @@ const AnnouncementCard = ({ item }) => {
 
     async function sendComment() {
         const data = { body: comment, announcement: id };
-        await postRequest("/comment/", data);
+        await postRequest("comment/", data);
         setComment("")
         Keyboard.dismiss()
     }
