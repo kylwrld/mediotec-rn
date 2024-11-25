@@ -1,7 +1,17 @@
 import { router } from "expo-router";
 import { Pin, SendHorizontal } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Keyboard, Pressable, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    Keyboard,
+    Pressable,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Option from "../../components/Option";
 import Spinner from "../../components/Spinner";
@@ -17,8 +27,8 @@ const AnnouncementCard = ({ item }) => {
     async function sendComment() {
         const data = { body: comment, announcement: id };
         await postRequest("comment/", data);
-        setComment("")
-        Keyboard.dismiss()
+        setComment("");
+        Keyboard.dismiss();
     }
 
     return (
@@ -26,24 +36,27 @@ const AnnouncementCard = ({ item }) => {
             style={styles.shadowProp}
             className="w-full bg-white rounded-lg"
             onPress={() => router.push({ pathname: `/announcement/[id]`, params: { id: item.id } })}>
-            <View className="border border-slate-400 rounded-t-lg p-4 gap-5">
-                <View className="justify-between flex-row">
+            <View className="">
+                <View className="bg-blue-600 justify-between items-center flex-row rounded-t-lg p-4">
                     <View className="flex-row justify-center items-center gap-2">
-                        <Text className="text-xl font-bold">{item.user.name}</Text>
-                        {/* <Text className="text-[#64748b]">{new Date(item.created_at).toLocaleString("pt-BR")}</Text> */}
-                        <View className="h-[5px] w-[5px] bg-slate-400 rounded-full"></View>
-                        <Text className="text-[#64748b]">{dateDiff(new Date(), new Date(item.created_at))}</Text>
-                        {/* <Text className="text-slate-400">{dateDiff(new Date(), new Date(item.created_at))}</Text> */}
+                        <Text className="text-xl font-inter-bold text-white">{item.title}</Text>
                     </View>
 
-                    {item.fixed && <Pin color="black" />}
+                    {item.fixed && <Pin color="white" />}
                 </View>
-                <View className="gap-3">
-                    <Text className="text-2xl font-bold">{item.title}</Text>
-                    <Text className="text-lg">{item.body}</Text>
+                <View className="border-x border-slate-400 pb-4">
+                    <View className="p-2 items-center flex-row gap-2">
+                        <Text className="text-md font-inter-regular text-slate-500">{item.user.name}</Text>
+                        <View className="h-[5px] w-[5px] bg-slate-500 rounded-full"></View>
+                        <Text className="font-inter-regular text-[#64748b] text-slate-500">{dateDiff(new Date(), new Date(item.created_at))} atrás</Text>
+                    </View>
+                    {/* <View className="w-full h-[1px] bg-slate-400"></View> */}
+                    <View className="p-2 justify-center">
+                        <Text className="font-inter-regular text-lg">{item.body}</Text>
+                    </View>
                 </View>
             </View>
-            <View className="flex-row border-b border-x border-slate-400 rounded-b-lg p-2">
+            <View className="flex-row border border-slate-400 rounded-b-lg p-2">
                 <TextInput
                     className="flex-1"
                     placeholder="Escreva um comentário..."
@@ -102,7 +115,7 @@ const Announcements = () => {
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}
                 keyboardShouldPersistTaps="always"
                 ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-                ListHeaderComponent={<ListHeaderComponent setFilter={setFilter} user={user}/>}
+                ListHeaderComponent={<ListHeaderComponent setFilter={setFilter} user={user} />}
             />
             <StatusBar backgroundColor="#fff" />
         </SafeAreaView>
@@ -116,18 +129,15 @@ const ListHeaderComponent = ({ setFilter, user }) => {
         if (selected == 0) {setFilter(() => (announcement) => announcement);}
         if (selected == 1) {setFilter(() => (announcement) => announcement.class_year?._class.id == user.class_id);}
         if (selected == 2) {setFilter(() => (announcement) => announcement.fixed);}
-    }
+    };
 
     return (
         <View className="my-6">
             <Text className="font-inter-bold text-blue-600 text-4xl">Avisos</Text>
-            <Option
-                options={selectOptions}
-                onChange={onOptionChange}
-            />
+            <Option options={selectOptions} onChange={onOptionChange} />
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     shadowProp: {

@@ -1,14 +1,42 @@
-import { View, Text, ScrollView, RefreshControl } from "react-native";
-import React, { useEffect, useState } from "react";
+import { default as React, useEffect, useState } from "react";
+import { RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAuthContext from "../../context/AuthContext";
-import Spinner from "../../components/Spinner";
 import { mergeLists } from "../../lib/utils";
-import DataTable from "../../components/DataTable";
+import Spinner from "../../components/Spinner";
 
-const MAX_TIMESCHEDULES = 8;
 
-const TimeSchedule = () => {
+
+const DayCard = ({ day, timeSchedules, keyExtractor }) => {
+    return (
+        <View>
+            <View className="rounded-t-lg p-4 gap-5 justify-center bg-blue-600">
+                <Text className="text-lg text-white font-inter-bold">{ day }</Text>
+            </View>
+            <View className="border-x border-b border-slate-400 rounded-b-lg">
+                { timeSchedules ? timeSchedules.map((timeSchedule, index) => (
+                    <View className={`flex-row justify-between items-center ${index%2!=0 && "bg-slate-200"} px-2 py-[2px]`} key={index}>
+                        <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
+                            {timeSchedule.hour + "h" + (timeSchedule.minute == "0" ? "00" : timeSchedule.minute)}
+                        </Text>
+                        <View className="px-2 justify-center items-end">
+                            { timeSchedule[keyExtractor]?.teacher_subject.subject.name ? (
+                                <View className="items-end">
+                                    <Text className="font-inter-semibold">{timeSchedule[keyExtractor]?.teacher_subject.subject.name ?? "-"}</Text>
+                                    <Text className="font-inter-regular text-sm">{timeSchedule[keyExtractor]?.teacher_subject.teacher.name ?? "-"}</Text>
+                                </View>
+                            ):
+                            <View className="p-2"><Text>-</Text></View>
+                            }
+                        </View>
+                    </View>
+                )) : null}
+            </View>
+        </View>
+    )
+};
+
+function TimeSchedule() {
     const [timeSchedules, setTimeSchedules] = useState([]);
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
@@ -62,8 +90,9 @@ const TimeSchedule = () => {
                 }
             );
         }
-        setLoading(false);
+
         setTimeSchedules(newTimeSchedule);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -71,167 +100,41 @@ const TimeSchedule = () => {
     }, []);
 
     const onRefresh = React.useCallback(() => {
-        // setRefreshing(true);
         setLoading(true);
         fetchData();
     }, []);
 
-    if (loading) return <Spinner />;
+    if (loading) return <Spinner />
 
     return (
-        <SafeAreaView className="flex-1 bg-white p-4">
+        <SafeAreaView className="flex-1 bg-white p-4 mt-6">
             <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
-                <View className="my-6">
-                    <Text className="font-inter-bold text-blue-600 text-4xl">Horários</Text>
+                <Text className="font-inter-bold text-blue-600 text-4xl">Horários</Text>
+                <View className="flex-1 gap-2 my-6">
+                    <DayCard day="Segunda" timeSchedules={timeSchedules} keyExtractor="monday_class_year_teacher_subject">
+                        <Text className="text-white font-inter-bold text-2xl">Segunda</Text>
+                    </DayCard>
+                    <DayCard day="Terça" timeSchedules={timeSchedules} keyExtractor="tuesday_class_year_teacher_subject">
+                        <Text className="text-white font-inter-bold text-2xl">Terça</Text>
+                    </DayCard>
+                    <DayCard day="Quarta" timeSchedules={timeSchedules} keyExtractor="wednesday_class_year_teacher_subject">
+                        <Text className="text-white font-inter-bold text-2xl">Quarta</Text>
+                    </DayCard>
+                    <DayCard day="Quinta" timeSchedules={timeSchedules} keyExtractor="thursday_class_year_teacher_subject">
+                        <Text className="text-white font-inter-bold text-2xl">Quinta</Text>
+                    </DayCard>
+                    <DayCard day="Sexta" timeSchedules={timeSchedules} keyExtractor="friday_class_year_teacher_subject">
+                        <Text className="text-white font-inter-bold text-2xl">Sexta</Text>
+                    </DayCard>
                 </View>
-                <DataTable columns={columns} data={timeSchedules} />
             </ScrollView>
         </SafeAreaView>
     );
-};
+}
 
 export default TimeSchedule;
 
-const MAX_WIDTH = "w-32";
-const MAX_HEIGHT = "h-16";
-
-const columns = [
-    {
-        accessorKey: "hour",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center w-20`}>Hora</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center w-20`}>
-                    {row.hour.toString() + "h" + (row.minute.toString() == "0" ? "" : row.minute.toString())}
-                </Text>
-            </View>
-        ),
-    },
-    {
-        accessorKey: "monday_class_year_teacher_subject",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center ${MAX_WIDTH}`}>Segunda</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`${MAX_WIDTH} justify-center items-center ${MAX_HEIGHT}`}>
-                {row.monday_class_year_teacher_subject?.teacher_subject ? (
-                    <>
-                        <Text className="font-inter-semibold text-center">
-                            {row.monday_class_year_teacher_subject?.teacher_subject.subject.name || "-"}
-                        </Text>
-                        <Text className="text-center text-[12px]">
-                            {row.monday_class_year_teacher_subject?.teacher_subject.teacher.name}
-                        </Text>
-                    </>
-                ) : (
-                    <Text>-</Text>
-                )}
-            </View>
-        ),
-    },
-    {
-        accessorKey: "tuesday_class_year_teacher_subject",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center ${MAX_WIDTH}`}>Terça</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`${MAX_WIDTH} justify-center items-center ${MAX_HEIGHT}`}>
-                {row.tuesday_class_year_teacher_subject?.teacher_subject ? (
-                    <>
-                        <Text className="font-inter-semibold text-center">
-                            {row.tuesday_class_year_teacher_subject?.teacher_subject.subject.name || "-"}
-                        </Text>
-                        <Text className="text-center text-[12px]">
-                            {row.tuesday_class_year_teacher_subject?.teacher_subject.teacher.name}
-                        </Text>
-                    </>
-                ) : (
-                    <Text>-</Text>
-                )}
-            </View>
-        ),
-    },
-    {
-        accessorKey: "wednesday_class_year_teacher_subject",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center ${MAX_WIDTH}`}>Quarta</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`${MAX_WIDTH} justify-center items-center ${MAX_HEIGHT}`}>
-                {row.wednesday_class_year_teacher_subject?.teacher_subject ? (
-                    <>
-                        <Text className="font-inter-semibold text-center">
-                            {row.wednesday_class_year_teacher_subject?.teacher_subject.subject.name || "-"}
-                        </Text>
-                        <Text className="text-center text-[12px]">
-                            {row.wednesday_class_year_teacher_subject?.teacher_subject.teacher.name}
-                        </Text>
-                    </>
-                ) : (
-                    <Text>-</Text>
-                )}
-            </View>
-        ),
-    },
-    {
-        accessorKey: "thursday_class_year_teacher_subject",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center ${MAX_WIDTH}`}>Quinta</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`${MAX_WIDTH} justify-center items-center ${MAX_HEIGHT}`}>
-                {row.thursday_class_year_teacher_subject?.teacher_subject ? (
-                    <>
-                        <Text className="font-inter-semibold text-center">
-                            {row.thursday_class_year_teacher_subject?.teacher_subject.subject.name || "-"}
-                        </Text>
-                        <Text className="text-center text-[12px]">
-                            {row.thursday_class_year_teacher_subject?.teacher_subject.teacher.name}
-                        </Text>
-                    </>
-                ) : (
-                    <Text>-</Text>
-                )}
-            </View>
-        ),
-    },
-    {
-        accessorKey: "friday_class_year_teacher_subject",
-        header: ({ column }) => (
-            <View className={`justify-center items-center ${MAX_HEIGHT}`}>
-                <Text className={`font-inter-regular text-center ${MAX_WIDTH}`}>Sexta</Text>
-            </View>
-        ),
-        cell: ({ row }) => (
-            <View className={`${MAX_WIDTH} justify-center items-center ${MAX_HEIGHT}`}>
-                {row.friday_class_year_teacher_subject?.teacher_subject ? (
-                    <>
-                        <Text className="font-inter-semibold text-center">
-                            {row.friday_class_year_teacher_subject?.teacher_subject.subject.name || "-"}
-                        </Text>
-                        <Text className="text-center text-[12px]">
-                            {row.friday_class_year_teacher_subject?.teacher_subject.teacher.name}
-                        </Text>
-                    </>
-                ) : (
-                    <Text>-</Text>
-                )}
-            </View>
-        ),
-    },
-];
+const MAX_TIMESCHEDULES = 8;
 
 const SHIFT_MORNING = [
     [7, 0],

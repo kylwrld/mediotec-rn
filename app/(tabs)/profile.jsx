@@ -8,7 +8,7 @@ import useAuthContext from "../../context/AuthContext";
 const SettingsItem = ({ children, onPress }) => {
     return (
         // <View className="flex-row gap-2">
-        <TouchableOpacity onPress={onPress} className="w-full flex-row gap-5">
+        <TouchableOpacity onPress={onPress} className="items-center w-full flex-row gap-5">
             {children}
         </TouchableOpacity>
         // {/* </View> */}
@@ -17,9 +17,9 @@ const SettingsItem = ({ children, onPress }) => {
 
 const ProfileItem = ({ children, icon }) => {
     return (
-        <View className="flex-row gap-5">
+        <View className="items-start flex-row gap-5">
             <View className="pl-1 pt-1">{icon}</View>
-            <View>{children}</View>
+            <View className="">{children}</View>
         </View>
     );
 };
@@ -53,7 +53,7 @@ const Profile = () => {
                 <View className="gap-10">
                     <View className="h-60 justify-center items-center gap-5">
                         {userData.image && (
-                            <View className="w-32 h-32">
+                            <View className="w-32 h-32 border border-slate-400 rounded-full p-[4px]">
                                 <Image
                                     className="w-full h-full rounded-full"
                                     source={{ uri: userData.image }}
@@ -64,55 +64,57 @@ const Profile = () => {
                         <Text className="font-inter-extrabold text-4xl">{userData.name}</Text>
                     </View>
                     <View className="px-10 gap-5">
-                        <ProfileItem icon={<Mail color="#64748b" />}>
+                        <ProfileItem icon={<Mail color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Email</Text>
                             <Text className="text-xl font-inter-regular">{userData.email}</Text>
                         </ProfileItem>
 
-                        <ProfileItem icon={<Users color="#64748b" />}>
+                        <ProfileItem icon={<Users color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Turma</Text>
                             <Text className="text-xl font-inter-regular">
                                 {userData.class_year?._class.name || "Não encontrado"}
                             </Text>
                         </ProfileItem>
 
-                        <ProfileItem icon={<Calendar color="#64748b" />}>
+                        <ProfileItem icon={<Calendar color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Ano</Text>
                             <Text className="text-xl font-inter-regular">
                                 {userData.class_year?._class.degree || "Não encontrado"}
                             </Text>
                         </ProfileItem>
 
-                        <ProfileItem icon={<AlarmClock color="#64748b" />}>
+                        <ProfileItem icon={<AlarmClock color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Turno</Text>
                             <Text className="text-xl font-inter-regular">
                                 {userData.class_year?._class.shift || "Não encontrado"}
                             </Text>
                         </ProfileItem>
 
-                        <ProfileItem icon={<Brain color="#64748b" />}>
+                        <ProfileItem icon={<Brain color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Curso</Text>
                             <Text className="text-xl font-inter-regular">
                                 {userData.class_year?._class.type || "Não encontrado"}
                             </Text>
                         </ProfileItem>
 
-                        <ProfileItem icon={<CircleAlert color="#64748b" />}>
+                        <ProfileItem icon={<CircleAlert color="#ea580c" />}>
                             <Text className="text-lg font-inter-regular text-slate-500">Faltas</Text>
                             <Text className="text-xl font-inter-regular">
                                 {userData.attendances || "Não encontrado"}
                             </Text>
                         </ProfileItem>
+                        {/* <View className="border-t border-slate-300">
+                        </View> */}
                         <SettingsItem onPress={logout}>
                             <View className="pl-1 pt-1">
-                                <LogOut color="black" />
+                                <LogOut color="#ea580c" />
                             </View>
                             <Text className="font-inter-regular text-xl">Sair</Text>
                         </SettingsItem>
                     </View>
                 </View>
             </ScrollView>
-            <View className="px-10" style={{ paddingVertical: 25 }}></View>
+            {/* <View className="px-10" style={{ paddingVertical: 25 }}></View> */}
         </SafeAreaView>
     );
 };

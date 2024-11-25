@@ -47,7 +47,7 @@ const TabsLayout = () => {
                 <Tabs.Screen
                     name="time-schedule"
                     options={{
-                        title: "Conceitos",
+                        title: "Horarios",
                         tabBarIcon: ({ color, focused }) => <Icon><Calendar color={color} /></Icon>,
                         headerShown: false,
                     }}

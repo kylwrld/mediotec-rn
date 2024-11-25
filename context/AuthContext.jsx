@@ -8,6 +8,7 @@ const useAuthContext = () => useContext(AuthContext);
 export default useAuthContext;
 
 const API_URL = "https://mediotec-be.onrender.com/";
+// const API_URL = "http://192.168.1.10:8080/";
 
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
@@ -18,6 +19,7 @@ export function AuthProvider({ children }) {
         const getTokens = async () => {
             const _tokens = await AsyncStorage.getItem("tokens");
             const parsedTokens = JSON.parse(_tokens);
+            console.log(_tokens, "\n\n", parsedTokens)
             if (parsedTokens) {
                 const user = jwtDecode(JSON.stringify(_tokens));
                 setTokens(parsedTokens);
@@ -72,6 +74,12 @@ export function AuthProvider({ children }) {
             // logout();
         }
 
+        if (!res.ok) {
+            console.log("res not ok", res)
+            console.log("json", await res.json())
+            logout()
+        }
+
         return res;
     }
 
@@ -91,6 +99,12 @@ export function AuthProvider({ children }) {
             //logout();
         }
 
+        if (!res.ok) {
+            console.log("res not ok", res)
+            console.log("json", res)
+            logout()
+        }
+
         return res;
     }
 
@@ -102,6 +116,12 @@ export function AuthProvider({ children }) {
 
         if (res.status === 401) {
             logout();
+        }
+
+        if (!res.ok) {
+            console.log("res not ok", res)
+            console.log("json", res)
+            logout()
         }
 
         return res;
@@ -119,6 +139,11 @@ export function AuthProvider({ children }) {
 
         if (res.status === 401) {
             logout();
+        }
+        if (!res.ok) {
+            console.log("res not ok", res)
+            console.log("json", res)
+            logout()
         }
 
         return res;
