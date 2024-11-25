@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Bell, Calendar, FileText, UserRound } from "lucide-react-native";
+import { Bell, Calendar, FileText, UserRound, Info } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
 
@@ -60,9 +60,16 @@ const TabsLayout = () => {
                         headerShown: false,
                     }}
                 />
+                <Tabs.Screen
+                    name="info"
+                    options={{
+                        title: "Informações",
+                        tabBarIcon: ({ color, focused }) => <Icon><Info color={color} /></Icon>,
+                        headerShown: false,
+                    }}
+                />
             </Tabs>
             <StatusBar backgroundColor="#ffffff" style="auto" />
-
         </>
     );
 };
