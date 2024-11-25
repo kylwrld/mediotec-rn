@@ -38,14 +38,14 @@ const AnnouncementCard = ({ item }) => {
             className="w-full bg-white rounded-lg"
             onPress={() => router.push({ pathname: `/announcement/[id]`, params: { id: item.id } })}>
             <View className="">
-                <View className=" bg-blue-600 justify-between items-center flex-row rounded-t-lg p-4 gap-4">
+                <View className="bg-blue-600 justify-between items-center flex-row rounded-t-lg p-4 gap-4">
                     <View className="flex-1 flex-row justify-center items-center gap-4">
                         {item.user.image && (
                             <View className="w-12 h-12">
                                 <Image
                                     className="w-full h-full rounded-full"
                                     source={{ uri: item.user.image }}
-                                    resizeMode="contain"
+                                    resizeMode="cover"
                                 />
                             </View>
                         )}

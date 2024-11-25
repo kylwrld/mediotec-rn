@@ -13,8 +13,8 @@ const GradeCard = ({ item, unit = 1 }) => {
             <View className="rounded-t-lg p-4 gap-5 justify-center bg-blue-600">
                 <Text className="text-lg text-white font-inter-bold">{item.teacher_subject.subject.name}</Text>
             </View>
-            <View className="border-x border-b border-slate-400 rounded-b-lg">
-                <View className="flex-row justify-between p-2">
+            {/* <View className="border-x border-b border-slate-400 rounded-b-lg"> */}
+                <View className="flex-row justify-between p-2 border-x border-slate-400">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         AV1
                     </Text>
@@ -22,7 +22,7 @@ const GradeCard = ({ item, unit = 1 }) => {
                         <Text>{item[`av1_${unit}`] ?? "-"}</Text>
                     </View>
                 </View>
-                <View className="flex-row justify-between p-2 bg-slate-200">
+                <View className="flex-row justify-between p-2 border-x border-slate-400 bg-slate-200">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         AV2
                     </Text>
@@ -30,7 +30,7 @@ const GradeCard = ({ item, unit = 1 }) => {
                         <Text>{item[`av2_${unit}`] ?? "-"}</Text>
                     </View>
                 </View>
-                <View className="flex-row justify-between p-2">
+                <View className="flex-row justify-between p-2 border-x border-slate-400">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         Menção da Unidade
                     </Text>
@@ -38,7 +38,7 @@ const GradeCard = ({ item, unit = 1 }) => {
                         <Text>{item[`mu_${unit}`] ?? "-"}</Text>
                     </View>
                 </View>
-                <View className="flex-row justify-between p-2 bg-slate-200">
+                <View className="flex-row justify-between p-2 border-x border-slate-400 bg-slate-200">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         NOA
                     </Text>
@@ -46,7 +46,7 @@ const GradeCard = ({ item, unit = 1 }) => {
                         <Text>{item[`noa_${unit}`] ?? "-"}</Text>
                     </View>
                 </View>
-                <View className="flex-row justify-between p-2">
+                <View className="flex-row justify-between p-2 border-x border-b border-slate-400 rounded-b-lg">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         Conceito Final
                     </Text>
@@ -54,7 +54,7 @@ const GradeCard = ({ item, unit = 1 }) => {
                         <Text>{item[`cf_${unit}`] ?? "-"}</Text>
                     </View>
                 </View>
-            </View>
+            {/* </View> */}
         </>
     );
 };
