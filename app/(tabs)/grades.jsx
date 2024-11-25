@@ -13,7 +13,7 @@ const GradeCard = ({ item, unit = 1 }) => {
             <View className="rounded-t-lg p-4 gap-5 justify-center bg-blue-600">
                 <Text className="text-lg text-white font-inter-bold">{item.teacher_subject.subject.name}</Text>
             </View>
-            <View className="border-x border-b border-slate-400 rounded-b-lg gap-2">
+            <View className="border-x border-b border-slate-400 rounded-b-lg">
                 <View className="flex-row justify-between p-2">
                     <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
                         AV1

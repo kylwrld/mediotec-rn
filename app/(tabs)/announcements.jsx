@@ -3,6 +3,7 @@ import { Pin, SendHorizontal } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
     FlatList,
+    Image,
     Keyboard,
     Pressable,
     RefreshControl,
@@ -36,10 +37,19 @@ const AnnouncementCard = ({ item }) => {
             style={styles.shadowProp}
             className="w-full bg-white rounded-lg"
             onPress={() => router.push({ pathname: `/announcement/[id]`, params: { id: item.id } })}>
-            <View className="">
-                <View className="bg-blue-600 justify-between items-center flex-row rounded-t-lg p-4">
-                    <View className="flex-row justify-center items-center gap-2">
-                        <Text className="text-xl font-inter-bold text-white">{item.title}</Text>
+            <View className="flex-1">
+                <View className="flex-1 bg-blue-600 justify-between items-center flex-row rounded-t-lg p-4 gap-4">
+                    <View className="flex-1 flex-row justify-center items-center gap-4">
+                        {item.user.image && (
+                            <View className="w-12 h-12">
+                                <Image
+                                    className="w-full h-full rounded-full"
+                                    source={{ uri: item.user.image }}
+                                    resizeMode="contain"
+                                />
+                            </View>
+                        )}
+                        <Text className="text-xl font-inter-bold flex-1 text-white" numberOfLines={1}>{item.title}</Text>
                     </View>
 
                     {item.fixed && <Pin color="white" />}
@@ -48,7 +58,9 @@ const AnnouncementCard = ({ item }) => {
                     <View className="p-2 items-center flex-row gap-2">
                         <Text className="text-md font-inter-regular text-slate-500">{item.user.name}</Text>
                         <View className="h-[5px] w-[5px] bg-slate-500 rounded-full"></View>
-                        <Text className="font-inter-regular text-[#64748b] text-slate-500">{dateDiff(new Date(), new Date(item.created_at))} atrás</Text>
+                        <Text className="font-inter-regular text-[#64748b] text-slate-500">
+                            {dateDiff(new Date(), new Date(item.created_at))} atrás
+                        </Text>
                     </View>
                     {/* <View className="w-full h-[1px] bg-slate-400"></View> */}
                     <View className="p-2 justify-center">
