@@ -55,6 +55,8 @@ export function AuthProvider({ children }) {
             setTokens(_tokens);
             setUser(_user);
             return router.replace("/announcements")
+        } else {
+            logout()
         }
         return
     }
@@ -71,6 +73,7 @@ export function AuthProvider({ children }) {
 
         if (res.status === 401) {
             getNewAccessToken();
+            return
             // logout();
         }
 
