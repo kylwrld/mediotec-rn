@@ -95,7 +95,7 @@ const Announcements = () => {
     const fetchAnnouncements = async () => {
         const response = await getRequest("announcement/");
         const data = await response.json();
-        setAnnouncements(data.announcements);
+        setAnnouncements(data.announcements || []);
         setLoading(false);
     };
     useEffect(() => {
