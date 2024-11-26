@@ -7,8 +7,8 @@ export const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 export default useAuthContext;
 
-// const API_URL = "https://mediotec-be.onrender.com/";
-const API_URL = "http://192.168.1.10:8000/";
+const API_URL = "https://mediotec-be.onrender.com/";
+// const API_URL = "http://192.168.1.10:8000/";
 
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState();
 
     useEffect(() => {
+        // Set user on init or redirect to /login
         const getTokens = async () => {
             const _tokens = await AsyncStorage.getItem("tokens");
             const parsedTokens = JSON.parse(_tokens);
@@ -42,8 +43,8 @@ export function AuthProvider({ children }) {
             },
             body: JSON.stringify({ refresh: tokens.refresh }),
         });
+
         if (response.ok) {
-            console.log("response", response)
             const data = await response.json();
             const _tokens = { ...tokens, access: data.access };
             console.log("_tokens", _tokens)
@@ -51,7 +52,6 @@ export function AuthProvider({ children }) {
             console.log("_user", _user)
             setTokens(_tokens);
             setUser(_user);
-            // router.replace("/announcements")
             return _tokens
         } else {
             logout()
@@ -108,7 +108,6 @@ export function AuthProvider({ children }) {
                 headers: { Authorization: "Bearer " + tokens.access },
             });
         } catch {
-            // throw Error
             return logout()
         }
 
@@ -124,13 +123,9 @@ export function AuthProvider({ children }) {
             } catch {
                 return logout()
             }
-            return res
-
         }
 
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -163,8 +158,6 @@ export function AuthProvider({ children }) {
         }
 
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -205,8 +198,6 @@ export function AuthProvider({ children }) {
         }
 
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -229,7 +220,7 @@ export function AuthProvider({ children }) {
             AsyncStorage.setItem("tokens", JSON.stringify(data));
         }
 
-        return res;
+        return [res, data];
     }
 
     async function logout() {

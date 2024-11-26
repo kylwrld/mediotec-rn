@@ -37,7 +37,7 @@ const DayCard = ({ day, timeSchedules, keyExtractor }) => {
                                       </View>
                                   ) : (
                                       <View className="p-2">
-                                          <Text>-</Text>
+                                          <Text className="font-inter-regular">-</Text>
                                       </View>
                                   )}
                               </View>

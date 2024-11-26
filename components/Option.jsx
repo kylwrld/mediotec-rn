@@ -8,6 +8,7 @@ const Option = ({ options = [], onChange = () => {} }) => {
     // }, [selectedOption])
 
     function _onChange(selected) {
+        if (selected == selectedOption) return
         setSelectedOption(selected)
         onChange({ selected });
     }
@@ -41,4 +42,4 @@ const Option = ({ options = [], onChange = () => {} }) => {
     );
 };
 
-export default Option;
+export default memo(Option);

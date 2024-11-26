@@ -20,13 +20,21 @@ export default function Login() {
         password: "",
     });
 
+    const [serverFeedback, setServerFeedback] = useState(null)
+
     async function onSubmit() {
         setErrors({ email: "", password: "" });
 
         const newErrors = {};
         if (!email.includes("@")) {
-            newErrors.email = 1;
-            setErrors({ ...newErrors, email: "Formato de email inválido." });
+            newErrors.email = "Formato de email inválido.";
+            setErrors({ ...newErrors });
+        }
+
+        if (password.trim() == "") {
+            newErrors.password = "Digite uma senha.";
+            console.log({...newErrors})
+            setErrors({ ...newErrors });
         }
 
         if (Object.keys(newErrors).length != 0) return;
@@ -34,10 +42,12 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const res = await postLogin({ email, password });
+            const [res, data] = await postLogin({ email, password });
             const userData = await decodeToken();
             if (res.ok) {
                 router.replace({ pathname: "/announcements", params: { id: userData.class_id } });
+            } else {
+                setServerFeedback(data.detail || "Email ou senha incorreta.")
             }
         } catch (e) {
             throw e;
@@ -66,6 +76,10 @@ export default function Login() {
                         ) : (
                             <>
                                 <Text className="font-inter-semibold text-4xl">Login</Text>
+                                <View>
+                                    {serverFeedback && <Text className="font-inter-regular text-red-600">{serverFeedback}</Text>}
+                                </View>
+
                                 <FormTextInputField
                                     label="Email"
                                     value={email}
@@ -77,14 +91,17 @@ export default function Login() {
                                 <FormTextInputField
                                     label="Senha"
                                     value={password}
+                                    error={errors.password}
                                     onChangeText={setPassword}
                                     placeholder="Digite sua senha"
+                                    textInputProps={{secureTextEntry: true}}
+                                    onEnterPress={onSubmit}
                                 />
 
                                 <TouchableOpacity
                                     className="justify-center items-center w-full bg-orange-600 p-4 rounded-lg"
                                     onPress={onSubmit}>
-                                    <Text className="text-lg text-white font-bold">Login</Text>
+                                    <Text className="font-inter-regular text-lg text-white font-bold">Login</Text>
                                 </TouchableOpacity>
                             </>
                         )}
