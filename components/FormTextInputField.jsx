@@ -3,7 +3,13 @@ import React from "react";
 
 import "../global.css";
 
-const FormTextInputField = ({ label, value, placeholder, onChangeText, error }) => {
+const FormTextInputField = ({ label, value, placeholder, onChangeText, error, textInputProps, onEnterPress }) => {
+    function _onEnterPress(e) {
+        if(e.nativeEvent.key == "Enter"){
+            onEnterPress && onEnterPress()
+        }
+    }
+
     return (
         <View className="w-full gap-2">
             <Text className="font-inter-regular">{label}</Text>
@@ -14,6 +20,8 @@ const FormTextInputField = ({ label, value, placeholder, onChangeText, error }) 
                 placeholderTextColor="#94a3b8"
                 onChangeText={onChangeText}
                 value={value}
+                onKeyPress={_onEnterPress}
+                {...textInputProps}
             />
             <View>
                 {error && <Text className="font-inter-regular text-red-600">{error}</Text>}

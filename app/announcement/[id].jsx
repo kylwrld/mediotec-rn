@@ -11,6 +11,7 @@ const AnnouncementId = () => {
     const { id } = useLocalSearchParams();
     const [announcement, setAnnouncement] = useState({});
     const [loading, setLoading] = useState(true);
+    const [submittingComment, setSubmittingComment] = useState(false);
     const [comment, setComment] = useState("");
 
     const { getRequest, postRequest } = useAuthContext();
@@ -29,6 +30,7 @@ const AnnouncementId = () => {
     if (loading) return <Spinner />;
 
     async function sendComment() {
+        // setSubmittingComment(true)
         if (comment.trim() == "") return;
         const data = { body: comment, announcement: id };
         const response = await postRequest("comment/", data);
@@ -36,10 +38,11 @@ const AnnouncementId = () => {
         setAnnouncement({ ...announcement, comments: [...announcement.comments, commentData] });
         setComment("")
         Keyboard.dismiss()
+        // setSubmittingComment(false)
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-white p-6 gap-10">
+        <SafeAreaView className="flex-1 bg-white p-6 gap-3">
             <ScrollView>
                 <View className="gap-2">
                     <Text className="font-inter-bold text-2xl mt-8 mb-4">{announcement.title}</Text>
@@ -102,6 +105,9 @@ const AnnouncementId = () => {
                 <TouchableOpacity className="px-2" onPress={sendComment}>
                     <SendHorizontal color="#9ca3af" />
                 </TouchableOpacity>
+                {/* <TouchableOpacity className="p-2" onPress={sendComment} disabled={submittingComment}>
+                    <SendHorizontal color={!submittingComment ? "#64748b" : "#e2e8f0"} />
+                </TouchableOpacity> */}
             </View>
         </SafeAreaView>
     );

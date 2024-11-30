@@ -8,7 +8,7 @@ const useAuthContext = () => useContext(AuthContext);
 export default useAuthContext;
 
 const API_URL = "https://mediotec-be.onrender.com/";
-// const API_URL = "http://192.168.1.10:8080/";
+// const API_URL = "http://192.168.1.10:8000/";
 
 export function AuthProvider({ children }) {
     const [isLogged, setIsLogged] = useState(false);
@@ -16,10 +16,10 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState();
 
     useEffect(() => {
+        // Set user on init or redirect to /login
         const getTokens = async () => {
             const _tokens = await AsyncStorage.getItem("tokens");
             const parsedTokens = JSON.parse(_tokens);
-            console.log(_tokens, "\n\n", parsedTokens)
             if (parsedTokens) {
                 const user = jwtDecode(JSON.stringify(_tokens));
                 setTokens(parsedTokens);
@@ -34,7 +34,6 @@ export function AuthProvider({ children }) {
 
     async function getNewAccessToken() {
         console.log("attempt to reconnect");
-        console.log({ refresh: tokens.refresh });
         console.log(JSON.stringify({ refresh: tokens.refresh }));
 
         const response = await fetch(API_URL + "api/token/refresh/", {
@@ -44,37 +43,52 @@ export function AuthProvider({ children }) {
             },
             body: JSON.stringify({ refresh: tokens.refresh }),
         });
+
         if (response.ok) {
-            console.log("response", response)
             const data = await response.json();
-            console.log("data", data)
             const _tokens = { ...tokens, access: data.access };
             console.log("_tokens", _tokens)
             const _user = jwtDecode(JSON.stringify(_tokens));
             console.log("_user", _user)
             setTokens(_tokens);
             setUser(_user);
-            return router.replace("/announcements")
+            return _tokens
         } else {
             logout()
         }
-        return
     }
 
     async function postRequest(url, obj) {
-        const res = await fetch(`${API_URL}${url}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + tokens.access,
-            },
-            body: JSON.stringify(obj),
-        });
+        let res
+        try {
+            res = await fetch(`${API_URL}${url}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + tokens.access,
+                },
+                body: JSON.stringify(obj),
+            });
+        } catch {
+            return logout()
+        }
 
         if (res.status === 401) {
-            getNewAccessToken();
-            return
-            // logout();
+            console.log("UNAUTHORIZED", res)
+            const newTokens = await getNewAccessToken();
+            console.log("RETRYING", newTokens)
+            try {
+                res = await fetch(`${API_URL}${url}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + newTokens.access,
+                    },
+                    body: JSON.stringify(obj),
+                });
+            } catch {
+                return logout()
+            }
         }
 
         if (!res.ok) {
@@ -94,17 +108,24 @@ export function AuthProvider({ children }) {
                 headers: { Authorization: "Bearer " + tokens.access },
             });
         } catch {
-            throw Error
+            return logout()
         }
 
         if (res.status === 401) {
-            getNewAccessToken();
-            //logout();
+            console.log("UNAUTHORIZED", res)
+            const newTokens = await getNewAccessToken();
+            console.log("RETRYING", newTokens)
+            try {
+                res = await fetch(`${API_URL}${url}`, {
+                    method: "GET",
+                    headers: { Authorization: "Bearer " + newTokens.access },
+                });
+            } catch {
+                return logout()
+            }
         }
 
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -112,18 +133,31 @@ export function AuthProvider({ children }) {
     }
 
     async function deleteRequest(url) {
-        const res = await fetch(url, {
-            method: "DELETE",
-            headers: { Authorization: "Bearer " + tokens.access },
-        });
+        let res
+        try {
+            res = await fetch(url, {
+                method: "DELETE",
+                headers: { Authorization: "Bearer " + tokens.access },
+            });
+        } catch {
+            return logout()
+        }
 
         if (res.status === 401) {
-            logout();
+            console.log("UNAUTHORIZED", res)
+            const newTokens = await getNewAccessToken();
+            console.log("RETRYING", newTokens)
+            try {
+                res = await fetch(url, {
+                    method: "DELETE",
+                    headers: { Authorization: "Bearer " + newTokens.access },
+                });
+            } catch {
+                return logout()
+            }
         }
 
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -131,21 +165,39 @@ export function AuthProvider({ children }) {
     }
 
     async function patchRequest(url, obj) {
-        const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + tokens.access,
-            },
-            body: JSON.stringify(obj),
-        });
+        let res
+        try {
+            res = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + tokens.access,
+                },
+                body: JSON.stringify(obj),
+            });
+        } catch {
+            return logout()
+        }
 
         if (res.status === 401) {
-            logout();
+            console.log("UNAUTHORIZED", res)
+            const newTokens = await getNewAccessToken();
+            console.log("RETRYING", newTokens)
+            try {
+                res = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + newTokens.access,
+                    },
+                    body: JSON.stringify(obj),
+                });
+            } catch {
+                return logout()
+            }
         }
+
         if (!res.ok) {
-            console.log("res not ok", res)
-            console.log("json", res)
             logout()
         }
 
@@ -153,8 +205,7 @@ export function AuthProvider({ children }) {
     }
 
     async function postLogin(userObject) {
-        const res = await fetch(API_URL + "login/", {
-            // const res = await fetch("https://mediotec-be.onrender.com/login/", {
+        const res = await fetch(API_URL + "login_student/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userObject),
@@ -169,7 +220,7 @@ export function AuthProvider({ children }) {
             AsyncStorage.setItem("tokens", JSON.stringify(data));
         }
 
-        return res;
+        return [res, data];
     }
 
     async function logout() {

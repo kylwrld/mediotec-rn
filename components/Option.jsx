@@ -8,35 +8,38 @@ const Option = ({ options = [], onChange = () => {} }) => {
     // }, [selectedOption])
 
     function _onChange(selected) {
+        if (selected == selectedOption) return
         setSelectedOption(selected)
         onChange({ selected });
     }
 
     return (
         <View className="pt-4 flex-row w-full gap-4 justify-between">
-            {options.map((option, index) => {
-                if (selectedOption == index) {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            className="bg-orange-600 w-32 h-12 rounded-full justify-center items-center"
-                            onPress={() => _onChange(index)}>
-                            <Text className="font-inter-semibold text-white">{option}</Text>
-                        </TouchableOpacity>
-                    );
-                } else {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            className="border border-slate-400 w-32 h-12 rounded-full justify-center items-center"
-                            onPress={() => _onChange(index)}>
-                            <Text className="font-inter-semibold">{option}</Text>
-                        </TouchableOpacity>
-                    );
-                }
-            })}
+            <View className="flex-1 flex-row justify-between gap-4">
+                {options.map((option, index) => {
+                    if (selectedOption == index) {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                className="bg-orange-600 flex-1 h-12 rounded-full justify-center items-center"
+                                onPress={() => _onChange(index)}>
+                                <Text className="font-inter-semibold text-white" numberOfLines={1}>{option}</Text>
+                            </TouchableOpacity>
+                        );
+                    } else {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                className="border border-slate-400 flex-1 h-12 rounded-full justify-center items-center"
+                                onPress={() => _onChange(index)}>
+                                <Text className="font-inter-semibold" numberOfLines={1}>{option}</Text>
+                            </TouchableOpacity>
+                        );
+                    }
+                })}
+            </View>
         </View>
     );
 };
 
-export default Option;
+export default memo(Option);

@@ -41,4 +41,4 @@ const info = () => {
   );
 }
 
-export default info
+export default infoS

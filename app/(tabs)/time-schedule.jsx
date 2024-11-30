@@ -5,35 +5,48 @@ import useAuthContext from "../../context/AuthContext";
 import { mergeLists } from "../../lib/utils";
 import Spinner from "../../components/Spinner";
 
-
-
 const DayCard = ({ day, timeSchedules, keyExtractor }) => {
     return (
         <View>
-            <View className="rounded-t-lg p-4 gap-5 justify-center bg-blue-600">
-                <Text className="text-lg text-white font-inter-bold">{ day }</Text>
+            <View className="rounded-t-lg p-4 justify-center bg-blue-600">
+                <Text className="text-lg text-white font-inter-bold">{day}</Text>
             </View>
-            <View className="border-x border-b border-slate-400 rounded-b-lg">
-                { timeSchedules ? timeSchedules.map((timeSchedule, index) => (
-                    <View className={`flex-row justify-between items-center ${index%2!=0 && "bg-slate-200"} px-2 py-[2px]`} key={index}>
-                        <Text className="font-inter-regular text-balance" textBreakStrategy="balanced" numberOfLines={3}>
-                            {timeSchedule.hour + "h" + (timeSchedule.minute == "0" ? "00" : timeSchedule.minute)}
-                        </Text>
-                        <View className="px-2 justify-center items-end">
-                            { timeSchedule[keyExtractor]?.teacher_subject.subject.name ? (
-                                <View className="items-end">
-                                    <Text className="font-inter-semibold">{timeSchedule[keyExtractor]?.teacher_subject.subject.name ?? "-"}</Text>
-                                    <Text className="font-inter-regular text-sm">{timeSchedule[keyExtractor]?.teacher_subject.teacher.name ?? "-"}</Text>
-                                </View>
-                            ):
-                            <View className="p-2"><Text>-</Text></View>
-                            }
-                        </View>
-                    </View>
-                )) : null}
-            </View>
+            {/* <View className="bg-red-600 w-fit border-x border-b border-slate-400 rounded-b-lg"> */}
+                {timeSchedules
+                    ? timeSchedules.map((timeSchedule, index) => (
+                          <View
+                              className={`flex-row justify-between items-center border-x border-slate-400
+                                            ${index % 2 == 0 && "bg-slate-200"}
+                                            ${index == timeSchedules.length - 1 && "rounded-b-lg border-b"}
+                                            px-2 py-[2px]`}
+                              key={index}>
+                              <Text
+                                  className="font-inter-regular text-balance"
+                                  textBreakStrategy="balanced">
+                                  {timeSchedule.hour + "h" + (timeSchedule.minute == "0" ? "00" : timeSchedule.minute)}
+                              </Text>
+                              <View className="px-2 justify-center items-end">
+                                  {timeSchedule[keyExtractor]?.teacher_subject.subject.name ? (
+                                      <View className="items-end">
+                                          <Text className="font-inter-semibold">
+                                              {timeSchedule[keyExtractor]?.teacher_subject.subject.name ?? "-"}
+                                          </Text>
+                                          <Text className="font-inter-regular text-sm">
+                                              {timeSchedule[keyExtractor]?.teacher_subject.teacher.name ?? "-"}
+                                          </Text>
+                                      </View>
+                                  ) : (
+                                      <View className="p-2">
+                                          <Text className="font-inter-regular">-</Text>
+                                      </View>
+                                  )}
+                              </View>
+                          </View>
+                      ))
+                    : null}
+            {/* </View> */}
         </View>
-    )
+    );
 };
 
 function TimeSchedule() {
@@ -104,28 +117,38 @@ function TimeSchedule() {
         fetchData();
     }, []);
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     return (
         <SafeAreaView className="flex-1 bg-white p-4 mt-6">
             <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
                 <Text className="font-inter-bold text-blue-600 text-4xl">Horários</Text>
-                <View className="flex-1 gap-2 my-6">
-                    <DayCard day="Segunda" timeSchedules={timeSchedules} keyExtractor="monday_class_year_teacher_subject">
-                        <Text className="text-white font-inter-bold text-2xl">Segunda</Text>
-                    </DayCard>
-                    <DayCard day="Terça" timeSchedules={timeSchedules} keyExtractor="tuesday_class_year_teacher_subject">
-                        <Text className="text-white font-inter-bold text-2xl">Terça</Text>
-                    </DayCard>
-                    <DayCard day="Quarta" timeSchedules={timeSchedules} keyExtractor="wednesday_class_year_teacher_subject">
-                        <Text className="text-white font-inter-bold text-2xl">Quarta</Text>
-                    </DayCard>
-                    <DayCard day="Quinta" timeSchedules={timeSchedules} keyExtractor="thursday_class_year_teacher_subject">
-                        <Text className="text-white font-inter-bold text-2xl">Quinta</Text>
-                    </DayCard>
-                    <DayCard day="Sexta" timeSchedules={timeSchedules} keyExtractor="friday_class_year_teacher_subject">
-                        <Text className="text-white font-inter-bold text-2xl">Sexta</Text>
-                    </DayCard>
+                <View className="my-6 gap-4">
+                    <DayCard
+                        day="Segunda"
+                        timeSchedules={timeSchedules}
+                        keyExtractor="monday_class_year_teacher_subject"
+                    />
+                    <DayCard
+                        day="Terça"
+                        timeSchedules={timeSchedules}
+                        keyExtractor="tuesday_class_year_teacher_subject"
+                    />
+                    <DayCard
+                        day="Quarta"
+                        timeSchedules={timeSchedules}
+                        keyExtractor="wednesday_class_year_teacher_subject"
+                    />
+                    <DayCard
+                        day="Quinta"
+                        timeSchedules={timeSchedules}
+                        keyExtractor="thursday_class_year_teacher_subject"
+                    />
+                    <DayCard
+                        day="Sexta"
+                        timeSchedules={timeSchedules}
+                        keyExtractor="friday_class_year_teacher_subject"
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
