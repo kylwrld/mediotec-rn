@@ -1,8 +1,6 @@
 import { View, Text, FlatList, ScrollView } from "react-native";
 import React from "react";
 
-// columns { accessor, header }
-
 const DataTable = ({ columns = [], data = [] }) => {
     const renderItem = ({ item: row, index }) => {
         const needBorder = index != data.length - 1;
