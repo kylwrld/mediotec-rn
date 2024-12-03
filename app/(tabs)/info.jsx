@@ -15,25 +15,25 @@ const info = () => {
       </View>
         <View className="p-4 gap-4">
         <Text className="font-inter-regular text-2xl text-slate-500 pb-4">Mediotec Recife</Text>
-          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("whatsapp://send?text=Olá&phone=+5581987019406")}>
+          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("whatsapp://send?text=Bom dia&phone=+558134136666")}>
             <Text className="font-inter-regular text- text-white text-center">Número Coordenação</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("mailto:admtest@gmail.com")}>
+          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("mailto:senac@pe.senac.br")}>
             <Text className="font-inter-regular text- text-white text-center">Email Coordenação</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("https:https//www.youtube.com/watch?v=Iig0kFj9Glg")}>
+          <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("https://www.google.com.br/")}>
             <Text className="font-inter-regular text- text-white text-center">Financeiro</Text>
           </TouchableOpacity>
         </View>
           <View className="p-4 gap-4">
           <Text className="font-inter-regular text-2xl text-slate-500 pb-4">Mediotec Paulista</Text>
-            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("whatsapp://send?text=Olá&phone=+5581987019406")}>
+            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("whatsapp://send?text=Bom dia&phone=+558133728250")}>
               <Text className="font-inter-regular text- text-white text-center">Número Coordenação</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("mailto:admtest@gmail.com")}>
+            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("mailto:senac@pe.senac.br")}>
               <Text className="font-inter-regular text- text-white text-center">Email Coordenação</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("https://www.youtube.com/watch?v=Iig0kFj9Glg")}>
+            <TouchableOpacity className="rounded-md bg-orange-600 flex-start mx-16 p-4" onPress={() => openURL("https://www.google.com.br/")}>
               <Text className="font-inter-regular text- text-white text-center">Financeiro</Text>
             </TouchableOpacity>
           </View>
