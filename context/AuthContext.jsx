@@ -44,14 +44,18 @@ export function AuthProvider({ children }) {
             body: JSON.stringify({ refresh: tokens.refresh }),
         });
 
+        console.log(response)
         if (response.ok) {
             const data = await response.json();
+            console.log(data)
             const _tokens = { ...tokens, access: data.access };
             console.log("_tokens", _tokens)
             const _user = jwtDecode(JSON.stringify(_tokens));
             console.log("_user", _user)
             setTokens(_tokens);
             setUser(_user);
+            console.log(data)
+            AsyncStorage.setItem("tokens", JSON.stringify(data));
             return _tokens
         } else {
             logout()

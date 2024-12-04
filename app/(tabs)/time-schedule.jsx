@@ -120,10 +120,10 @@ function TimeSchedule() {
     if (loading) return <Spinner />;
 
     return (
-        <SafeAreaView className="flex-1 bg-white p-4 mt-6">
-            <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
-                <Text className="font-inter-bold text-blue-600 text-4xl">Horários</Text>
-                <View className="my-6 gap-4">
+        <SafeAreaView className="flex-1 bg-white">
+            <ScrollView className="flex-1" refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
+                <View className="my-6 p-4 gap-4">
+                    <Text className="font-inter-bold text-blue-600 text-4xl">Horários</Text>
                     <DayCard
                         day="Segunda"
                         timeSchedules={timeSchedules}

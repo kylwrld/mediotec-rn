@@ -7,7 +7,7 @@ import { Building, CircleDollarSign, Mail, Phone } from 'lucide-react-native'
 const Info = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="my-4 p-4">
+      <View className="my-6 p-4">
         <Text className="font-inter-bold text-blue-600 text-4xl">Informações</Text>
       </View>
         <View className="p-4 gap-4">

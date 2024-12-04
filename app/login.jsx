@@ -33,7 +33,6 @@ export default function Login() {
 
         if (password.trim() == "") {
             newErrors.password = "Digite uma senha.";
-            console.log({...newErrors})
             setErrors({ ...newErrors });
         }
 

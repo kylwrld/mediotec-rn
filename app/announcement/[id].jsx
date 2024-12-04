@@ -25,7 +25,7 @@ const AnnouncementId = () => {
 
     useEffect(() => {
         fetchAnnouncement();
-    }, [announcement]);
+    }, []);
 
     if (loading) return <Spinner />;
 
